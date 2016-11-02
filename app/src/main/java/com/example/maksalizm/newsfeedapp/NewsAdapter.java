@@ -53,8 +53,9 @@ public class NewsAdapter extends ArrayAdapter <News> {
 
         newsPubicationDateView.setText(formattedPublicationDate);
 
+        ImageView newsThumbnail = (ImageView) listItemView.findViewById(R.id.thumbnail);
 
-
+        newsThumbnail.setImageBitmap(currentNews.getThumbnail());
 
         return listItemView;
     }

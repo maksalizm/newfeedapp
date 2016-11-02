@@ -1,54 +1,62 @@
 package com.example.maksalizm.newsfeedapp;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.app.LoaderManager;
+import android.content.Context;
+import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
+import android.view.View;
+import android.widget.ListView;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+import android.app.LoaderManager;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Loader;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class MainActivity extends AppCompatActivity implements LoaderCallbacks<List<News>> {
+
+    public static final String LOG_TAG = MainActivity.class.getName();
+
 
     private static final String USGS_REQUEST_URL =
-            "http://content.guardianapis.com/search?q=debate&tag=politics/politics&from-date=2014-01-01&api-key=test";
+            "http://content.guardianapis.com/search?q=debate&tag=politics/politics&from-date=2016-11-01&api-key=test";
+
+    private NewsAdapter mAdapter;
+
+    private static final int NEWS_LOADER_ID = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new DownloadImageTask((ImageView) findViewById(R.id.imageView1))
-                .execute("http://java.sogeti.nl/JavaBlog/wp-content/uploads/2009/04/android_icon_256.png");
+        ListView newsListView = (ListView) findViewById(R.id.listview_news);
+
+        mAdapter = new NewsAdapter(this, new ArrayList<News>());
+
+        newsListView.setAdapter(mAdapter);
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView mBmImage;
+    @Override
+    public Loader<List<News>> onCreateLoader(int id, Bundle args) {
+        return new NewsLoader(this, USGS_REQUEST_URL);
+    }
 
-        public DownloadImageTask(ImageView vBmImage) {
-            this.mBmImage = vBmImage;
-        }
+    @Override
+    public void onLoadFinished(Loader<List<News>> loader, List<News> newses) {
+        Log.v(LOG_TAG, newses.toString());
+        mAdapter.addAll(newses);
+    }
 
-        protected Bitmap doInBackground(String... urls) {
-            String urlDisplay = urls[0];
-            Bitmap mIcon = null;
-
-            try {
-                InputStream in = new URL(urlDisplay).openStream();
-                mIcon = BitmapFactory.decodeStream(in);
-            } catch (IOException e) {
-                Log.e("Error", e.getMessage());
-            }
-            return mIcon;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            mBmImage.setImageBitmap(result);
-        }
-
+    @Override
+    public void onLoaderReset(Loader<List<News>> loader) {
+        mAdapter.clear();
     }
 }

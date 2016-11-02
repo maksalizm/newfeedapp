@@ -1,5 +1,6 @@
 package com.example.maksalizm.newsfeedapp;
 
+import android.graphics.Bitmap;
 import android.preference.PreferenceFragment;
 
 /**
@@ -13,15 +14,13 @@ public class News {
     private long mPublicationDate;
     private String mType;
     private String mUrl;
-    private String mThumbnail;
+    private Bitmap mThumbnail;
 
-    public News(String vTitle, String vContent, long vPublicationDate, String vType, String vUrl, String vThumbnail) {
+    public News(String vTitle, long vPublicationDate, String vType, String vUrl) {
         mTitle = vTitle;
-        mContent = vContent;
         mPublicationDate = vPublicationDate;
         mType = vType;
         mUrl = vUrl;
-        mThumbnail = vThumbnail;
     }
 
     public String getTitle() {
@@ -44,7 +43,14 @@ public class News {
         return mUrl;
     }
 
-    public String getThumbnail() {
+    public Bitmap getThumbnail() {
         return mThumbnail;
+    }
+
+    public void setThumbnail(Bitmap vBm) {
+        mThumbnail = vBm;
+    }
+    public void setContent(String vContent) {
+        mContent = vContent;
     }
 }
