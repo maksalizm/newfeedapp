@@ -52,7 +52,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     @Override
     public void onLoadFinished(Loader<List<News>> loader, List<News> newses) {
         Log.v(LOG_TAG, newses.toString());
-        mAdapter.addAll(newses);
+        if (newses != null && !newses.isEmpty()) {
+            mAdapter.addAll(newses);
+        }
     }
 
     @Override

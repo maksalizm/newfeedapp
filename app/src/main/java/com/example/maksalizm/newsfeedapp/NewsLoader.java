@@ -45,13 +45,14 @@ public class NewsLoader extends AsyncTaskLoader<List<News>> {
         List <News> newses = QueryUtils.fetchNewsData(mUrl);
 
         for(int i = 0; i < newses.size(); i++) {
+            Log.v("error", "1");
             News currentNews = newses.get(i);
             try {
                 Document doc = Jsoup.connect(currentNews.getUrl()).get();
                 Elements content = doc.select("div.content__article-body > p");
                 currentNews.setContent(content.text());
 
-                String thumbnailSrc = doc.select("meta[name='thumbnail']").attr("src");
+                String thumbnailSrc = doc.select("meta[name='thumbnail']").attr("content");
 
                 try {
                     InputStream in = new URL(thumbnailSrc).openStream();

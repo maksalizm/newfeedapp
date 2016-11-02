@@ -39,8 +39,9 @@ public final class QueryUtils {
 
         try {
             jsonResponse = makeHttpRequest(url);
+            Log.v(LOG_TAG, jsonResponse);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error closing iput stream", e);
+           Log.e(LOG_TAG, "Error closing iput stream", e);
         }
 
         List <News> newses = extractFeatureFromJson(jsonResponse);
@@ -135,6 +136,9 @@ public final class QueryUtils {
                 String url = currentNews.getString("webUrl");
 
                 News news = new News(title, publicationDate, type, url);
+
+                Log.v("debug", news.toString());
+
                 newses.add(news);
             }
         } catch (JSONException e) {
